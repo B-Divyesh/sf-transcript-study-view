@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Turn official YouTube and TED transcripts into calm, timestamped reading pages with local highlights and browser text-to-speech." />
+    <meta name="theme-color" content="#F4F0E7" />
+    <title>Transcript Study View — Read the talk, keep your place</title>
+    <link rel="preload" href="/fonts/atkinson-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/source-serif-latin.woff2" as="font" type="font/woff2" crossorigin />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Transcript Study View home"><img src="/assets/mark.svg" width="36" height="36" alt="" /><span>Transcript Study View</span></a>
+      <nav aria-label="Primary navigation"><a href="#how">How it works</a><a href="#privacy-first">Privacy</a><a class="nav-cta" href="#install">Get the extension</a></nav>
+    </header>
+    <main id="main">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="kicker"><span aria-hidden="true"></span> A calmer path through video</p>
+          <h1>Read the talk.<br /><em>Keep your place.</em></h1>
+          <p class="lede">Turn the official transcript of a YouTube video or TED talk into a quiet reading page—with paragraphs, timestamp trails, local highlights, and optional browser voice.</p>
+          <div class="hero-actions"><a class="button button-primary" href="#install">Get the free extension <span aria-hidden="true">↘</span></a><a class="text-link" href="#reader-preview">See the reading view <span aria-hidden="true">↓</span></a></div>
+          <p class="trust-line"><span aria-hidden="true">◆</span> No account · No upload · No AI rewrite</p>
+        </div>
+        <figure class="hero-scene">
+          <picture>
+            <source type="image/avif" srcset="/assets/listening-garden-960.avif 960w, /assets/listening-garden-1536.avif 1536w" sizes="(max-width: 760px) 100vw, 58vw" />
+            <source type="image/webp" srcset="/assets/listening-garden-960.webp 960w, /assets/listening-garden-1536.webp 1536w" sizes="(max-width: 760px) 100vw, 58vw" />
+            <img src="/assets/listening-garden-960.webp" width="960" height="640" fetchpriority="high" decoding="async" alt="Paper terraces form transcript-like paragraphs beside a copper path leading toward a cobalt moon." />
+          </picture>
+          <figcaption>Every paragraph leads back to the moment it came from.</figcaption>
+        </figure>
+      </section>
+
+      <section class="marquee" aria-label="Product principles"><div><span>Official captions only</span><i aria-hidden="true">◆</i><span>Timestamp reversible</span><i aria-hidden="true">◆</i><span>Highlights stay local</span><i aria-hidden="true">◆</i><span>Your browser can read aloud</span></div></section>
+
+      <section id="how" class="how section-wrap">
+        <div class="section-intro"><p class="kicker">From watching to studying</p><h2>One click changes the medium,<br />not the meaning.</h2></div>
+        <ol class="steps">
+          <li><span class="step-no">01</span><div><h3>Open a supported talk</h3><p>Choose a YouTube video or TED talk that provides an official transcript to you.</p></div></li>
+          <li><span class="step-no">02</span><div><h3>Open Study View</h3><p>The extension gathers only the timed text already present on that page and shapes it into readable paragraphs.</p></div></li>
+          <li><span class="step-no">03</span><div><h3>Follow your own trail</h3><p>Search, adjust spacing, listen with browser TTS, save local highlights, or jump back to any timestamp.</p></div></li>
+        </ol>
+      </section>
+
+      <section id="reader-preview" class="preview-section">
+        <div class="preview-copy"><p class="kicker">The reading surface</p><h2>Made for the way attention actually moves.</h2><p>Skim the page, slow down, hear a paragraph, then return to the exact moment. Study View keeps those choices close without crowding the text.</p><ul><li>Comfortable 68-character reading measure</li><li>Dyslexia-friendly spacing and type option</li><li>Keyboard paths for searching and moving</li></ul></div>
+        <div class="reader-mock" aria-label="Illustration of the transcript reader">
+          <div class="mock-rail"><span class="mini-source"></span><span></span><span></span><div class="mock-button"></div><span></span><span></span></div>
+          <div class="mock-page"><div class="mock-moon"></div><small>TED · OFFICIAL SOURCE</small><h3>How curiosity changes the route we take</h3><div class="mock-rule"></div><div class="mock-paragraph"><b>0:42</b><p>We do not always need a faster answer. Sometimes we need a clearer path through the material in front of us.</p></div><div class="mock-paragraph active"><b>1:18</b><p>The useful shift is not away from listening, but toward choosing the form that lets attention settle.</p></div><div class="mock-paragraph"><b>2:03</b><p>And because the timestamps remain, the original voice is never more than one step away.</p></div></div>
+        </div>
+      </section>
+
+      <section id="privacy-first" class="privacy-callout section-wrap">
+        <div class="privacy-symbol" aria-hidden="true"><span></span></div>
+        <div><p class="kicker">Private by construction</p><h2>The transcript never needs to leave your browser.</h2><p>Captured text lives only for the browser session. Highlights and reading preferences are stored locally. There are no accounts, analytics, remote transcription calls, or media downloads.</p><a class="text-link" href="/privacy/">Read the plain-language privacy policy <span aria-hidden="true">→</span></a></div>
+      </section>
+
+      <section id="install" class="install section-wrap">
+        <div class="install-heading"><p class="kicker">Free and open source</p><h2>Choose your browser.<br />Take the quiet route.</h2><p>Version 1.0 · Install from the packaged build. Store listings can follow after pilot testing.</p></div>
+        <div class="install-grid">
+          <article><span class="browser-mark" aria-hidden="true">◎</span><div><h3>Chrome &amp; Edge</h3><p>Download, unzip, then load the <code>chrome-mv3</code> folder from your browser’s Extensions page with Developer mode enabled.</p><a class="button button-primary download-link" href="/downloads/transcript-study-view-chromium.zip" download>Download for Chromium <span aria-hidden="true">↓</span></a></div></article>
+          <article><span class="browser-mark firefox" aria-hidden="true">◒</span><div><h3>Firefox</h3><p>Download, unzip, then load the manifest temporarily from <code>about:debugging</code> for the pilot build.</p><a class="button button-secondary download-link" href="/downloads/transcript-study-view-firefox.zip" download>Download for Firefox <span aria-hidden="true">↓</span></a></div></article>
+        </div>
+        <details class="install-help"><summary>Step-by-step Chromium install</summary><ol><li>Download and unzip the package.</li><li>Open <code>chrome://extensions</code> or <code>edge://extensions</code>.</li><li>Turn on Developer mode.</li><li>Choose “Load unpacked” and select the <code>chrome-mv3</code> folder.</li><li>Pin Study View, open a captioned talk, and select the extension.</li></ol></details>
+      </section>
+    </main>
+    <footer class="site-footer"><div class="footer-brand"><img src="/assets/mark.svg" width="40" height="40" alt="" /><div><strong>Transcript Study View</strong><span>A Param Factory utility</span></div></div><p>Switch medium without losing the source.</p><nav aria-label="Footer navigation"><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="https://github.com/B-Divyesh/sf-transcript-study-view" rel="noreferrer">Source</a></nav><small>Original Listening Garden artwork generated for this product with OpenAI’s image model. © 2026 Sociobot.</small></footer>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

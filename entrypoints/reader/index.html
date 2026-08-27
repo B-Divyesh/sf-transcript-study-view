@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Study view — Transcript Study View</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to transcript</a>
+    <header class="topbar">
+      <a class="wordmark" href="https://transcript-study-view.sociobot.in" target="_blank" rel="noreferrer">
+        <img src="/icon/32.png" width="32" height="32" alt="" /><span>Transcript Study View</span>
+      </a>
+      <div class="top-actions">
+        <span class="saved-note"><span aria-hidden="true">◆</span> Saved locally</span>
+        <a id="source-top" class="button button-secondary source-top" href="#" target="_blank" rel="noreferrer">Open source <span aria-hidden="true">↗</span></a>
+      </div>
+    </header>
+    <main id="main" tabindex="-1">
+      <section id="loading" class="state-page" aria-live="polite">
+        <div class="state-art" aria-hidden="true"><span></span><span></span><span></span></div>
+        <p class="eyebrow">Shaping the page</p>
+        <h2>Loading transcript…</h2>
+        <p>Gathering the official timed lines from this browser session.</p>
+      </section>
+
+      <section id="error-state" class="state-page" hidden>
+        <div class="state-art error-art" aria-hidden="true"><span></span><span></span><span></span></div>
+        <p class="eyebrow">The trail went cold</p>
+        <h2 id="error-title">This study session has ended.</h2>
+        <p id="error-copy">Reopen the extension from the original talk to start a fresh local reading session.</p>
+        <a class="button button-primary" href="https://transcript-study-view.sociobot.in/#install" target="_blank" rel="noreferrer">View opening steps</a>
+      </section>
+
+      <div id="reader-shell" class="reader-shell" hidden>
+        <aside class="study-rail" aria-label="Study tools">
+          <div class="source-card">
+            <p class="eyebrow">Source transcript</p>
+            <p id="source-site" class="source-site"></p>
+            <a id="source-link" href="#" target="_blank" rel="noreferrer">View original talk <span aria-hidden="true">↗</span></a>
+          </div>
+
+          <div class="tool-group">
+            <label for="search">Find in transcript</label>
+            <div class="search-wrap"><span aria-hidden="true">⌕</span><input id="search" type="search" autocomplete="off" placeholder="A word or phrase" /><kbd>/</kbd></div>
+            <p id="search-status" class="subtle" role="status"></p>
+          </div>
+
+          <div class="tool-group">
+            <p class="tool-label">Listen in browser</p>
+            <div class="split-actions">
+              <button id="speak" class="button button-primary" type="button"><span aria-hidden="true">▶</span><span>Read aloud</span></button>
+              <button id="stop" class="button button-secondary icon-button" type="button" aria-label="Stop reading" disabled><span aria-hidden="true">■</span></button>
+            </div>
+            <p id="voice-note" class="subtle">Uses a voice already available on your device.</p>
+          </div>
+
+          <div class="tool-group">
+            <p class="tool-label">Reading comfort</p>
+            <div class="font-control" aria-label="Transcript text size">
+              <button id="font-down" type="button" aria-label="Decrease text size">A−</button><span id="font-size">20 px</span><button id="font-up" type="button" aria-label="Increase text size">A+</button>
+            </div>
+            <label class="check-row"><input id="spacing" type="checkbox" /><span>Generous letter spacing</span></label>
+            <label class="select-row" for="theme"><span>Theme</span><select id="theme"><option value="system">System</option><option value="light">Paper</option><option value="dark">Night garden</option></select></label>
+          </div>
+
+          <div class="tool-group highlights-panel">
+            <div class="panel-heading"><p class="tool-label">Highlights</p><span id="highlight-count">0</span></div>
+            <button id="save-selection" class="button button-secondary" type="button" disabled>Save selection</button>
+            <div id="highlights" class="highlights-list"><p class="subtle">Select words or save a paragraph. Highlights stay on this device.</p></div>
+          </div>
+
+          <details class="shortcuts">
+            <summary>Keyboard shortcuts</summary>
+            <dl><div><dt><kbd>J</kbd> / <kbd>K</kbd></dt><dd>Next / previous</dd></div><div><dt><kbd>Space</kbd></dt><dd>Read / pause</dd></div><div><dt><kbd>Esc</kbd></dt><dd>Stop voice</dd></div></dl>
+          </details>
+        </aside>
+
+        <article id="transcript" class="transcript" aria-labelledby="reader-title">
+          <header class="transcript-header">
+            <p id="transcript-meta" class="eyebrow"></p>
+            <div class="title-row"><div><h1 id="reader-title" tabindex="-1"></h1><p id="duration" class="dek"></p></div><div class="moon-mark" aria-hidden="true"></div></div>
+            <div class="progress-block"><div><span>Reading trail</span><span id="progress-label">0%</span></div><div class="progress-track"><span id="progress-bar"></span></div></div>
+          </header>
+          <div id="paragraphs" class="paragraphs"></div>
+          <footer class="end-note"><span aria-hidden="true">◆</span><p><strong>End of transcript.</strong><br />Return to any timestamp to continue in the original talk.</p></footer>
+        </article>
+      </div>
+    </main>
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden><span id="toast-text"></span><button id="toast-action" type="button" hidden>Undo</button></div>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

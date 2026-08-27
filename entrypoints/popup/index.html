@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transcript Study View</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <header class="popup-header">
+      <a class="brand" href="https://transcript-study-view.sociobot.in" target="_blank" rel="noreferrer" aria-label="Transcript Study View website">
+        <img src="/icon/32.png" width="32" height="32" alt="" />
+        <span>Study View</span>
+      </a>
+      <span class="local-badge">Local only</span>
+    </header>
+    <main id="main">
+      <section class="intro" aria-labelledby="popup-title">
+        <div class="moon" aria-hidden="true"></div>
+        <p class="eyebrow">Switch the medium</p>
+        <h1 id="popup-title">Read the talk.<br />Keep your place.</h1>
+        <p id="status-copy" class="status-copy">Checking this page for an official transcript…</p>
+      </section>
+      <div id="status" class="status" role="status" aria-live="polite">
+        <span class="status-mark" aria-hidden="true"></span>
+        <span id="status-label">Checking page</span>
+      </div>
+      <button id="open-reader" class="button button-primary open-button" type="button" disabled>
+        <span>Open study view</span><span aria-hidden="true">↗</span>
+      </button>
+      <details class="help">
+        <summary>What can I open?</summary>
+        <p>YouTube videos and TED talks with an official transcript available to you. We never download the video or generate new text.</p>
+      </details>
+    </main>
+    <footer><span>Your highlights stay in this browser.</span><a href="https://transcript-study-view.sociobot.in/privacy/" target="_blank" rel="noreferrer">Privacy</a></footer>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
