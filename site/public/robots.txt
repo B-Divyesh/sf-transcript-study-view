@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://transcript-study-view.sociobot.in/sitemap.xml
