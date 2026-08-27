@@ -50,7 +50,7 @@ The build also creates responsive AVIF artwork, renders extension PNG icons from
 ## Architecture
 
 - WXT + TypeScript for the MV3 extension.
-- A content script reads page-owned transcript DOM/data and seeks the existing media player.
+- Isolated and narrowly scoped MAIN-world content scripts read page-owned transcript rows/player caption data and seek the existing media player.
 - `storage.session` holds captured text; `storage.local` holds highlights and preferences.
 - The reader uses the platform `SpeechSynthesis` API and no external service.
 - Vite builds a dependency-light static site with no runtime CDN.

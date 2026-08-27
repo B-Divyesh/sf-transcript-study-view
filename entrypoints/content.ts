@@ -83,6 +83,32 @@ function extractVisibleTranscript(): TranscriptSegment[] {
   return detectSupportedSite(location.href) === 'YouTube' ? extractYouTubeDom() : extractTedDom();
 }
 
+async function requestYouTubeOfficialTrack(): Promise<TranscriptSegment[]> {
+  const requestId = crypto.randomUUID();
+  return await new Promise<TranscriptSegment[]>((resolve) => {
+    let attempts = 0;
+    const finish = (segments: TranscriptSegment[]) => {
+      window.removeEventListener('message', receive);
+      window.clearInterval(retryTimer);
+      window.clearTimeout(timeoutTimer);
+      resolve(normalizeSegments(segments));
+    };
+    const receive = (event: MessageEvent) => {
+      if (event.source !== window || event.data?.channel !== 'transcript-study-view' || event.data?.type !== 'caption-response' || event.data?.requestId !== requestId) return;
+      const segments = Array.isArray(event.data.segments) ? event.data.segments as TranscriptSegment[] : [];
+      if (segments.length > 1 || attempts >= 8) finish(segments);
+    };
+    const request = () => {
+      attempts += 1;
+      window.postMessage({ channel: 'transcript-study-view', type: 'request-captions', requestId }, '*');
+    };
+    window.addEventListener('message', receive);
+    const retryTimer = window.setInterval(request, 350);
+    const timeoutTimer = window.setTimeout(() => finish([]), 4200);
+    request();
+  });
+}
+
 async function revealTranscript(): Promise<void> {
   const candidates = Array.from(document.querySelectorAll<HTMLElement>('button, [role="button"], tp-yt-paper-button'));
   const trigger = candidates.find((element) => {
@@ -111,6 +137,7 @@ async function capture(allowReveal: boolean): Promise<CaptureResponse> {
   const site = detectSupportedSite(location.href);
   if (!site) return { ok: false, reason: 'unsupported', message: 'Open a YouTube video or TED talk first.' };
   let segments = extractVisibleTranscript();
+  if (segments.length < 2 && site === 'YouTube') segments = await requestYouTubeOfficialTrack();
   if (segments.length < 2 && allowReveal) {
     await revealTranscript();
     segments = extractVisibleTranscript();
