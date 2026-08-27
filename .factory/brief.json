@@ -1,0 +1,13 @@
+{
+  "slug": "transcript-study-view",
+  "title": "Transcript Study View",
+  "territory": "utilities",
+  "user": "A person who absorbs text better than video or audio and wants a calm, navigable reading version of a talk they are already watching.",
+  "current_workaround": "Open a platform transcript panel, copy it into a document, use reader mode, or rely on auto-transcripts with awkward line breaks.",
+  "smallest_useful_product": "A browser extension that detects an official transcript/caption track visible to the user and opens a local reader with paragraphs, timestamp jump links, dyslexia-friendly spacing and optional browser TTS.",
+  "success_measure": "At least 70% of pilot users finish a selected 10-minute talk using the transcript view and use three or more timestamp jumps or saved highlights.",
+  "artifact_class": "browser-extension",
+  "monetization": "free",
+  "constraints": "Use only text/caption tracks the site exposes to the signed-in user; preserve source URL and timestamps; no copyrighted media download or anti-bot bypass; local highlights by default.",
+  "non_goals": ["Downloading media", "Transcribing unavailable content", "Hiding attribution", "Summaries", "LLM rewriting"]
+}
