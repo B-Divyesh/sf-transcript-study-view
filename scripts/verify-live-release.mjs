@@ -1,8 +1,8 @@
 import { createHash } from 'node:crypto';
-import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { join } from 'node:path';
 import { chromium } from '@playwright/test';
 
 const siteUrl = process.env.SITE_URL ?? 'https://transcript-study-view.sociobot.in';
@@ -11,14 +11,13 @@ const packages = [
   'transcript-study-view-firefox.zip'
 ];
 const temporaryRoot = await mkdtemp(join(tmpdir(), 'transcript-study-view-live-'));
+const expectedRevision = process.env.EXPECTED_REVISION;
 
 function digest(bytes) {
   return createHash('sha256').update(bytes).digest('hex');
 }
 
-async function fetchPackage(packageName) {
-  const localPath = resolve('dist/site/downloads', packageName);
-  const expected = await readFile(localPath);
+async function fetchPackage(packageName, expectedHash) {
   const response = await fetch(`${siteUrl}/downloads/${packageName}`, { redirect: 'error' });
   if (!response.ok) throw new Error(`${packageName}: expected HTTP 200, got ${response.status}`);
   if (!response.headers.get('content-type')?.includes('application/zip')) {
@@ -26,7 +25,7 @@ async function fetchPackage(packageName) {
   }
   const received = Buffer.from(await response.arrayBuffer());
   if (!received.subarray(0, 4).equals(Buffer.from('PK\x03\x04'))) throw new Error(`${packageName}: response is not a ZIP file`);
-  if (digest(received) !== digest(expected)) throw new Error(`${packageName}: live SHA-256 does not match the fresh build`);
+  if (digest(received) !== expectedHash) throw new Error(`${packageName}: live SHA-256 does not match its deployed release manifest`);
   const output = join(temporaryRoot, packageName);
   await writeFile(output, received);
   execFileSync('unzip', ['-t', output], { stdio: 'inherit' });
@@ -34,8 +33,17 @@ async function fetchPackage(packageName) {
 }
 
 try {
-  const chromiumZip = await fetchPackage(packages[0]);
-  await fetchPackage(packages[1]);
+  const releaseResponse = await fetch(`${siteUrl}/release.json`, { redirect: 'error' });
+  if (!releaseResponse.ok) throw new Error(`release.json: expected HTTP 200, got ${releaseResponse.status}`);
+  const release = await releaseResponse.json();
+  if (typeof release.revision !== 'string' || !release.packages || typeof release.packages !== 'object') {
+    throw new Error('release.json: expected a revision and package checksum map');
+  }
+  if (expectedRevision && release.revision !== expectedRevision) {
+    throw new Error(`release.json: expected revision ${expectedRevision}, got ${release.revision}`);
+  }
+  const chromiumZip = await fetchPackage(packages[0], release.packages[packages[0]]);
+  await fetchPackage(packages[1], release.packages[packages[1]]);
 
   const unpacked = join(temporaryRoot, 'chromium');
   execFileSync('unzip', ['-q', chromiumZip, '-d', unpacked]);
@@ -52,7 +60,7 @@ try {
     await context.close();
   }
 
-  console.log(`Live release verified: ${siteUrl} serves both current ZIP packages and the Chromium package loads in a fresh profile.`);
+  console.log(`Live release verified: ${siteUrl} revision ${release.revision} serves both checksum-matched ZIP packages and the Chromium package loads in a fresh profile.`);
 } finally {
   await rm(temporaryRoot, { recursive: true, force: true });
 }

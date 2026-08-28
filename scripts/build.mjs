@@ -1,5 +1,6 @@
-import { cp, mkdir, readdir, rm, stat } from 'node:fs/promises';
+import { cp, mkdir, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { join } from 'node:path';
 import sharp from 'sharp';
 
@@ -43,6 +44,16 @@ for (const name of outputFiles) {
   const destination = name.includes('firefox') ? 'transcript-study-view-firefox.zip' : 'transcript-study-view-chromium.zip';
   await cp(join('.output', name), join('dist/site/downloads', destination));
 }
+
+const packages = ['transcript-study-view-chromium.zip', 'transcript-study-view-firefox.zip'];
+const release = {
+  revision: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(),
+  packages: Object.fromEntries(await Promise.all(packages.map(async (name) => {
+    const bytes = await readFile(join('dist/site/downloads', name));
+    return [name, createHash('sha256').update(bytes).digest('hex')];
+  })))
+};
+await writeFile('dist/site/release.json', `${JSON.stringify(release, null, 2)}\n`);
 
 const budgets = [
   ['dist/site', 200 * 1024, /\.js$/],
