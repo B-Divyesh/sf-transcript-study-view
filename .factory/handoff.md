@@ -1,8 +1,8 @@
 # Handoff — Transcript Study View v1
 
-## Independent verification status: **FAIL**
+## Repair status: local verification passed; deployment pending
 
-Candidate `5f21fd859d794a2b23a8f8d3328d32b581cd680f` was independently verified on 2026-08-28 UTC against https://transcript-study-view.sociobot.in/. The local production build and extension checks passed, but the deployed installation links are broken: both Chromium and Firefox ZIP URLs return the home page as HTML. The candidate must not be accepted or released until those packages are deployed and the reader error/loading shell is fixed. Full evidence and all findings are in [`.factory/verification.md`](verification.md).
+This repair addresses every finding in the independent report for candidate `5f21fd859d794a2b23a8f8d3328d32b581cd680f`. The original report remains in [`.factory/verification.md`](verification.md). The source repair has passed a clean local verification and is ready to deploy from `dist/site/`; live checks will be appended after deployment.
 
 ## What shipped
 
@@ -27,21 +27,24 @@ npm run test:e2e
 
 Deploy `dist/site/`. For an unpacked browser smoke test, load `dist/extension/chrome-mv3/` from `chrome://extensions` with Developer mode enabled, open a captioned YouTube video or TED talk, select the extension, and choose **Open study view**.
 
-## Independent verification completed on 2026-08-28
+## Repair verification on 2026-08-28
 
-- `npm ci`, `npm test` (18/18), `npm run typecheck`, `npm run build`, and `npm audit --omit=dev` passed.
-- `npm run test:e2e` passed 5 tests with 1 intentional skip only after installing the browser expected by lockfile-resolved Playwright 1.62.1; a fresh invocation initially failed because the supplied browser revision did not match.
-- Packaged Chromium extension: official YouTube JSON3 caption-track bridge, capture, timestamp seek, missing-transcript recovery, TED DOM capture, mobile reader search/highlight/type/theme/focus paths, and axe were exercised. No severe/critical axe findings.
-- Live pages were byte-identical to the local build for HTML, JS, CSS, and sampled imagery; automatic initial-load requests stayed first-party and used no analytics/CDNs.
-- **Release blockers:** both live `/downloads/*.zip` links return 8,261-byte `text/html` landing-page fallbacks instead of the built ZIPs; reader stale-session/loading shell remains visible despite `hidden`.
-- Additional findings: live favicon 404 console error; no live CSP/Permissions-Policy; static assets cache for only 30 seconds; masked 34 px desktop document overflow.
+- Clean `npm ci` completed with the lockfile-resolved `@playwright/test`, `playwright`, and `playwright-core` all pinned to **1.58.2**, the supplied browser revision. No ad-hoc browser download was needed.
+- `npm test`: **25/25** checks passed. This includes deployment-policy assertions (ZIP routes excluded from fallback; CSP, Permissions-Policy, and immutable asset/font cache policies) and public-page favicon coverage.
+- `npm run typecheck`: passed. `npm audit --omit=dev --audit-level=low`: **0 production vulnerabilities**.
+- `npm run build`: passed and generated Chromium/Firefox MV3 builds, both site ZIPs, and `dist/site/staticwebapp.config.json`. `unzip -t` passed for both packages.
+- `npm run test:e2e`: **8 passed, 2 intentional project skips**. It runs site axe checks on desktop and 390px mobile, checks normal-layout width at both sizes, checks that both built downloads are `application/zip` with ZIP signatures, and runs the actual packaged Chromium extension under Xvfb. The extension test proves loading and stale-session pages hide the reader shell, then seeds a session at 390px and checks `/` search plus `J` navigation.
+- Local Lighthouse mobile: **100 Performance / 100 Accessibility / 100 Best Practices / 100 SEO**; FCP **1.0 s**, LCP **1.8 s**, CLS **0**, TBT **0 ms**.
+- Build sizes: site JS **918 B**, CSS **12,382 B**, self-hosted fonts **84,820 B**, mobile AVIF **43,078 B**, and Chromium extension **140.72 KB** unpacked. No service worker is shipped because this is a static extension landing site, not a PWA.
+- Current built ZIP SHA-256: Chromium `4eaa3c56936ae2c48895ede04e808f01503c9ca034f8c4136942da84c8b8ec5d`; Firefox `28db24bc5a9c431481dcea2c43bf273558b479cd0502cfc7072892806ba8c42f`.
 
-## Required next steps before acceptance
+## Repairs made
 
-- Deploy actual Chromium and Firefox ZIPs to the linked `/downloads/` routes; verify `application/zip`, checksum, unpacking, and installation from the public URLs.
-- Fix hidden reader state rendering and add coverage for loading/stale-session visual behavior.
-- Pin/configure Playwright and its browser so fresh `npm ci && npm run test:e2e` works without an ad-hoc browser download.
-- Add a favicon, suitable CSP/Permissions-Policy, immutable caching for hashed assets, and constrain the desktop hero decoration.
+- Explicit `[hidden]` display rules now prevent the loading/error pages from showing reader controls.
+- The static-web-app configuration excludes `/downloads/*` from navigation fallback, provides real ZIP response headers, adds CSP/Permissions-Policy, and uses immutable caching for hashed assets, fonts, and packages.
+- Playwright and axe dependencies are pinned compatibly to the supplied browser; end-to-end tests build first and use a disposable display for the Chromium extension consumer test.
+- A first-party SVG favicon is linked on landing, privacy, and terms pages.
+- The hero ornament is bounded inside its scene and the body no longer masks desktop overflow.
 
 ## Product follow-up notes
 

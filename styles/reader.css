@@ -16,6 +16,8 @@ body { min-height: 100vh; }
 .state-art span:nth-child(3) { bottom: 64px; left: 158px; width: 34px; height: 34px; background: var(--cobalt); border: 0; }
 .error-art span:nth-child(2) { left: 115px; width: 75px; background: var(--copper); transform: rotate(17deg); }
 .reader-shell { display: grid; grid-template-columns: 280px minmax(0, 780px); gap: clamp(48px, 7vw, 104px); width: min(1230px, calc(100% - 48px)); margin: 0 auto; padding: 52px 0 120px; }
+/* Component display rules must never defeat the HTML hidden state. */
+.reader-shell[hidden], .state-page[hidden] { display: none; }
 .study-rail { position: sticky; top: 92px; align-self: start; max-height: calc(100vh - 116px); overflow-y: auto; padding: 4px 8px 24px 4px; scrollbar-width: thin; }
 .source-card { padding: 0 0 24px; border-bottom: 1px solid var(--line); }
 .eyebrow { margin: 0 0 10px; color: var(--copper); font-size: 13px; font-weight: 760; letter-spacing: 0.12em; text-transform: uppercase; }

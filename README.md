@@ -23,7 +23,7 @@ The build produces Manifest V3 packages for Chromium and Firefox. YouTube and TE
 Requirements: Node.js 22+ and npm 10+.
 
 ```sh
-npm install
+npm ci
 npm run dev          # WXT extension development
 npm run dev:site     # landing site development
 ```
@@ -39,11 +39,15 @@ npm run build        # exact factory build; outputs everything under dist/
 npm run test:e2e     # Playwright + axe on desktop and 390px mobile
 ```
 
+The committed Playwright version is pinned to `1.58.2`, matching the factory browser revision. On Linux, `npm run test:e2e` uses `xvfb-run` because Chromium only permits the packaged-extension smoke test in its headed browser binary.
+
 `npm run build` creates:
 
 - `dist/extension/chrome-mv3/` and `dist/extension/firefox-mv3/` unpacked builds;
 - `dist/site/` as the static deployment root, with `index.html` at its root;
 - installable pilot ZIPs in `dist/site/downloads/`.
+
+`dist/site/` also contains `staticwebapp.config.json`. It deliberately excludes `/downloads/*` from the static-app navigation fallback so installation links remain ZIP files, applies a restrictive CSP and Permissions-Policy, and gives fingerprinted assets, fonts, and ZIPs immutable cache lifetimes while keeping HTML short-lived.
 
 The build also creates responsive AVIF artwork, renders extension PNG icons from the source SVG, copies only the two self-hosted Latin font subsets, and enforces the 200 KB JavaScript / 50 KB CSS budgets.
 

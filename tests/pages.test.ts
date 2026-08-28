@@ -24,6 +24,11 @@ describe.each(pages)('%s', (path) => {
   it('gives every image an alt attribute', () => {
     document.querySelectorAll('img').forEach((image) => expect(image.hasAttribute('alt')).toBe(true));
   });
+
+  it('uses the shipped favicon on public pages', () => {
+    if (!path.startsWith('site/')) return;
+    expect(document.querySelector('link[rel="icon"]')?.getAttribute('href')).toBe('/favicon.svg');
+  });
 });
 
 describe('privacy claims match implementation', () => {

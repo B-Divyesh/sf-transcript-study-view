@@ -25,12 +25,21 @@ test('legal pages expose one clear main heading and pass axe', async ({ page }) 
   }
 });
 
-test('390px layout has no horizontal overflow and keeps actions usable', async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== 'mobile', 'Mobile-only layout assertion');
+test('layouts have no horizontal overflow and keep installation actions usable', async ({ page }) => {
   await page.goto('/');
   const dimensions = await page.evaluate(() => ({ viewport: document.documentElement.clientWidth, content: document.documentElement.scrollWidth }));
   expect(dimensions.content).toBeLessThanOrEqual(dimensions.viewport);
   await expect(page.getByRole('link', { name: /Get the free extension/ })).toBeVisible();
   await page.getByRole('link', { name: /Get the free extension/ }).click();
   await expect(page.locator('#install')).toBeInViewport();
+});
+
+test('built installation packages are real ZIP downloads', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop', 'One package check is sufficient.');
+  for (const packageName of ['transcript-study-view-chromium.zip', 'transcript-study-view-firefox.zip']) {
+    const response = await page.request.get(`/downloads/${packageName}`);
+    expect(response.ok(), packageName).toBe(true);
+    expect(response.headers()['content-type']).toContain('application/zip');
+    expect((await response.body()).subarray(0, 4).toString()).toBe('PK\x03\x04');
+  }
 });

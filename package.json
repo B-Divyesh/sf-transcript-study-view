@@ -9,7 +9,7 @@
     "dev:site": "vite --config vite.site.config.ts",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test",
+    "test:e2e": "npm run build && xvfb-run -a playwright test",
     "postinstall": "wxt prepare",
     "typecheck": "tsc --noEmit",
     "build:extension": "wxt build",
@@ -17,10 +17,11 @@
     "build": "node scripts/build.mjs"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.10.2",
+    "@axe-core/playwright": "4.10.2",
     "@fontsource-variable/atkinson-hyperlegible-next": "^5.2.8",
     "@fontsource-variable/source-serif-4": "^5.2.8",
-    "@playwright/test": "^1.55.0",
+    "@playwright/test": "1.58.2",
+    "playwright-core": "1.58.2",
     "@types/chrome": "^0.1.0",
     "@types/jsdom": "^21.1.7",
     "jsdom": "^26.1.0",

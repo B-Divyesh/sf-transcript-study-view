@@ -3,7 +3,7 @@
 :root { color-scheme: light; --canvas: #f4f0e7; --paper: #fffdf6; --ink: #18231d; --muted: #59675f; --moss: #254d3d; --moss-contrast: #fffdf6; --copper: #a44121; --cobalt: #2d4c9c; --line: #c9c4b8; --focus: #d75a2c; font-family: 'Atkinson', system-ui, sans-serif; background: var(--canvas); color: var(--ink); }
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { margin: 0; overflow-x: hidden; background: var(--canvas); color: var(--ink); }
+body { margin: 0; background: var(--canvas); color: var(--ink); }
 img { display: block; max-width: 100%; }
 a { color: var(--copper); text-underline-offset: 0.2em; }
 button, a { -webkit-tap-highlight-color: transparent; }
@@ -34,7 +34,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .trust-line { margin: 21px 0 0; color: var(--muted); font-size: 13px; }
 .trust-line span { color: var(--copper); }
 .hero-scene { position: relative; min-width: 0; margin: 0; }
-.hero-scene::before { position: absolute; z-index: -1; inset: 6% -7% -6% 7%; border: 1px solid var(--line); border-radius: 48% 48% 24px 8px; content: ''; transform: rotate(2deg); }
+.hero-scene::before { position: absolute; z-index: -1; inset: 6% 0 -6% 0; border: 1px solid var(--line); border-radius: 48% 48% 24px 8px; content: ''; transform: rotate(2deg); }
 .hero-scene picture { display: block; overflow: hidden; border-radius: 48% 48% 30px 8px; background: #e7dcc3; box-shadow: 0 30px 70px rgb(24 35 29 / 18%); }
 .hero-scene img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
 .hero-scene figcaption { width: fit-content; max-width: 330px; margin: -28px 22px 0 auto; position: relative; padding: 13px 16px; border-left: 3px solid var(--copper); color: var(--ink); background: var(--paper); box-shadow: 0 10px 22px rgb(24 35 29 / 12%); font-family: 'Source Serif', Georgia, serif; font-size: 15px; }
