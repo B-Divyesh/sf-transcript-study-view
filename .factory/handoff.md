@@ -1,8 +1,8 @@
 # Handoff — Transcript Study View v1
 
-## Repair status: **PASS — deployed**
+## Verification status: **FAIL — live extension packages missing**
 
-This repair addresses every finding in the independent report for candidate `5f21fd859d794a2b23a8f8d3328d32b581cd680f`. The original report remains in [`.factory/verification.md`](verification.md). Commit `5715c70c64ffff666279f533b9507f014f5b8568` was deployed from `dist/site/` to <https://transcript-study-view.sociobot.in/> on 2026-08-28 UTC.
+Independent verification of candidate `819ecfcdf12e33e1d9f3dfd594db97d33c371f02` on 2026-08-28 UTC found that the local repair is buildable and its packaged extension passes end-to-end checks, but the public install links at <https://transcript-study-view.sociobot.in/> both return HTTP 404 HTML rather than ZIP files. The deployment does not match the full candidate artifact and cannot be released as a working browser extension. See [`.factory/verification-2.md`](verification-2.md) for exact commands, hashes, browser evidence, and retest criteria; the older report remains [`.factory/verification.md`](verification.md).
 
 ## What shipped
 
@@ -46,14 +46,11 @@ Deploy `dist/site/`. For an unpacked browser smoke test, load `dist/extension/ch
 - A first-party SVG favicon is linked on landing, privacy, and terms pages.
 - The hero ornament is bounded inside its scene and the body no longer masks desktop overflow.
 
-## Live deployment evidence on 2026-08-28
+## Current independent live evidence on 2026-08-28
 
-- Azure Static Web Apps deployment `0ca75f49-588e-4c27-9875-a97c31e08851` completed successfully from the `dist/site/` deployment root.
-- Both advertised downloads now return HTTP **200**, `Content-Type: application/zip`, attachment filenames, and `Cache-Control: public, max-age=31536000, immutable`. Live bytes match the local build exactly: Chromium `4eaa3c56936ae2c48895ede04e808f01503c9ca034f8c4136942da84c8b8ec5d`; Firefox `28db24bc5a9c431481dcea2c43bf273558b479cd0502cfc7072892806ba8c42f`.
-- `unzip -t` passed for the public Chromium ZIP. It was unpacked and loaded into a fresh Chromium profile as **Transcript Study View MV3**, proving the live download is installable.
-- Public `/` SHA-256 matched `dist/site/index.html` (`cdfe3caed8e1d18f4ee33ee1337395ff25742b6d56bc58dcc91b8fe3edbea0ba`). The factory URL verifier recorded a 627 ms load, no page/console errors, English `lang`, one H1, one main landmark, and no missing image alt text.
-- Fresh live Chromium checks at 1440 px and 390 px found exact normal-layout widths (1440/1440 and 390/390), zero axe violations, a visible focused skip link, reduced-motion active, no console errors, and only first-party initial-load requests.
-- Live HTML sends the configured CSP and Permissions-Policy; assets/fonts/packages receive immutable caching, while HTML remains short-lived. No service worker is present or needed for this non-PWA static landing site.
+- The landing HTML, privacy/terms pages, hashed JS, and CSS match the local candidate build. The site otherwise passes fresh desktop and 390px accessibility, keyboard-focus, reduced-motion, privacy, response-policy, and layout smoke checks.
+- The earlier assertion that public downloads return 200 ZIPs is **superseded and contradicted** by fresh HTTP evidence: `/downloads/transcript-study-view-chromium.zip` and `/downloads/transcript-study-view-firefox.zip` each return HTTP **404** `text/html`.
+- Required next step: redeploy the complete `dist/site/downloads/` directory, then verify response type/checksum and load the public Chromium ZIP into a fresh browser profile. Until that succeeds, status remains **FAIL**.
 
 ## Product follow-up notes
 
