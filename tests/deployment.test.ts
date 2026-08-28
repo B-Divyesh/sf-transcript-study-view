@@ -1,6 +1,8 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
+const packageManifest = JSON.parse(readFileSync('package.json', 'utf8')) as { scripts: Record<string, string> };
+
 const config = JSON.parse(readFileSync('site/public/staticwebapp.config.json', 'utf8')) as {
   globalHeaders: Record<string, string>;
   navigationFallback: { exclude: string[] };
@@ -8,6 +10,10 @@ const config = JSON.parse(readFileSync('site/public/staticwebapp.config.json', '
 };
 
 describe('static deployment contract', () => {
+  it('builds installable packages as part of the deployment build command', () => {
+    expect(packageManifest.scripts['build:site']).toBe('node scripts/build.mjs');
+  });
+
   it('keeps installable packages out of the SPA fallback', () => {
     expect(config.navigationFallback.exclude).toContain('/downloads/*');
     for (const packageName of ['transcript-study-view-chromium.zip', 'transcript-study-view-firefox.zip']) {

@@ -35,17 +35,20 @@ For local browser testing, load WXT’s generated `.output/chrome-mv3` directory
 ```sh
 npm test             # unit and semantic document tests
 npm run typecheck
-npm run build        # exact factory build; outputs everything under dist/
+npm run lint         # ESLint for extension, site, tests, and build scripts
+npm run build:site   # exact factory deployment build; outputs everything under dist/
 npm run test:e2e     # Playwright + axe on desktop and 390px mobile
 ```
 
 The committed Playwright version is pinned to `1.58.2`, matching the factory browser revision. On Linux, `npm run test:e2e` uses `xvfb-run` because Chromium only permits the packaged-extension smoke test in its headed browser binary.
 
-`npm run build` creates:
+`npm run build:site` (and its `npm run build` alias) creates:
 
 - `dist/extension/chrome-mv3/` and `dist/extension/firefox-mv3/` unpacked builds;
 - `dist/site/` as the static deployment root, with `index.html` at its root;
 - installable pilot ZIPs in `dist/site/downloads/`.
+
+After a static deployment, run `npm run verify:live`. It verifies both public downloads are current ZIP bytes with the right response type, tests each archive, and loads the public Chromium package in a fresh profile.
 
 `dist/site/` also contains `staticwebapp.config.json`. It deliberately excludes `/downloads/*` from the static-app navigation fallback so installation links remain ZIP files, applies a restrictive CSP and Permissions-Policy, and gives fingerprinted assets, fonts, and ZIPs immutable cache lifetimes while keeping HTML short-lived.
 
