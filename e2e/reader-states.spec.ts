@@ -2,6 +2,7 @@ import { mkdtemp, rm } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { resolve } from 'node:path';
+import AxeBuilder from '@axe-core/playwright';
 import { chromium, expect, test } from '@playwright/test';
 
 const extensionPath = resolve('dist/extension/chrome-mv3');
@@ -54,11 +55,29 @@ test('packaged reader isolates loading/stale states and keeps mobile keyboard st
           ]
         }
       });
+      await chrome.storage.local.set({
+        'highlights:https://www.youtube.com/watch?v=keyboard-check': [{
+          id: 'saved-mobile-highlight',
+          paragraphId: 'p-0',
+          start: 0,
+          text: 'First shaped sentence has a phrase.',
+          sourceUrl: 'https://www.youtube.com/watch?v=keyboard-check',
+          createdAt: 0
+        }]
+      });
     });
     const readerPage = await context.newPage();
     await readerPage.setViewportSize({ width: 390, height: 844 });
     await readerPage.goto(`chrome-extension://${extensionId}/reader.html?session=keyboard-check`);
     await expect(readerPage.locator('#reader-shell')).toBeVisible();
+    await expect(readerPage.getByRole('link', { name: 'Transcript Study View home' })).toBeVisible();
+    const accessibility = await new AxeBuilder({ page: readerPage }).analyze();
+    expect(accessibility.violations, accessibility.violations.map((item) => `${item.id}: ${item.help}`).join('\n')).toEqual([]);
+    for (const control of [readerPage.locator('.highlight-jump'), readerPage.locator('.highlight-remove')]) {
+      const box = await control.boundingBox();
+      expect(box).not.toBeNull();
+      expect(box!.height).toBeGreaterThanOrEqual(44);
+    }
     await readerPage.keyboard.press('/');
     await readerPage.keyboard.type('another route');
     await expect(readerPage.locator('#search-status')).toHaveText('1 paragraph found');
